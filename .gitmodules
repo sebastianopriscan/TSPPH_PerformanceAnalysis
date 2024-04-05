@@ -1,0 +1,3 @@
+[submodule "TSPPartitionHeuristic"]
+	path = TSPPartitionHeuristic
+	url = git@github.com:sebastianopriscan/TSPPartitionHeuristic.git
