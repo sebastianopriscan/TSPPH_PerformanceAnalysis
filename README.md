@@ -19,5 +19,21 @@ The definitive layout of the repository is yet to be defined, so  for the moment
   - adapters : directory containing scripts written in order to transform the instances
 
   - analyzers : directory containing software for statistical processing of the results
+  
+  - extra : directory containing intermediate scripts used in the development process
+
+# Building
+
+For the moment, run
+
+``` bash
+  make convert
+```
+
+to download the instances and convert them in a format readable from the _TSP Partition Heuristic_ library.
 
 # Credits
+
+The evaluated instances are taken from the following source(s) :
+
+  - [TSPLIB95 : Gerhard Reinelt Universität Heidelberg Institut für Angewandte Mathematik](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/)
