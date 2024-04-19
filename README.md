@@ -14,6 +14,10 @@ The definitive layout of the repository is yet to be defined, so  for the moment
 
   - resources : directory containing the instances files taken online
 
+  - src : directory containing source code for the runners that generate the execution results of the algorithm
+
+  - performance\_scripts : directory containing the script that generate the execution results of the algorithm
+
   - results : directory containing the results produced by instance processing
 
   - adapters : directory containing scripts written in order to transform the instances
@@ -37,3 +41,7 @@ to download the instances and convert them in a format readable from the _TSP Pa
 The evaluated instances are taken from the following source(s) :
 
   - [TSPLIB95 : Gerhard Reinelt Universität Heidelberg Institut für Angewandte Mathematik](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/)
+
+As for the tests in TSPPartitionHeuristic, the solver used for the performance evaluation is HiGHS, see :
+
+- Parallelizing the dual revised simplex method Q. Huangfu and J. A. J. Hall Mathematical Programming Computation, 10 (1), 119-142, 2018. DOI: 10.1007/s12532-017-0130-5
