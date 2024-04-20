@@ -6,7 +6,36 @@
 #include <sys/stat.h>
 
 #include "model.h"
+#include "sampler.h"
 #include "../solvers/highsSolver.h"
+
+#define TEMP_FOR(ATTR) \
+    FILE *temp_##ATTR ;\
+    if((temp_##ATTR = fopen("./results/tmp_"#ATTR".txt", "w+")) == NULL) {\
+        perror("Error opening temp file. Exiting...") ;\
+        exit(1) ;\
+    }\
+    changeOutputOf(ATTR, temp_##ATTR) ;\
+
+#define FLUSH_CLOSE_AND_RENAME(ATTR) \
+    if(fflush(temp_##ATTR) == EOF) {\
+        perror("Error flushing temp file. Exiting...") ;\
+        exit(1) ;\
+    }\
+    if(fclose(temp_##ATTR) == EOF) {\
+        perror("Error closing temp file. Exiting...") ;\
+        exit(1) ;\
+    }\
+    sprintf(lineBuffer, "./results/%s_"#ATTR"_detailed_%s.txt", arranged_name, names[j][q]) ;\ 
+    if(rename("./results/tmp_"#ATTR".txt", lineBuffer) == -1) {\
+        perror("Error renaming file. Please recover manually") ;\
+        exit(1) ;\
+    }\
+    
+#define REDIRECT_TO_NULL() {\
+    changeOutputOf(costs, dev_null) ; \
+    changeOutputOf(adjacencies, dev_null) ; \
+    changeOutputOf(partitions, dev_null) ;} \
 
 #define TRIALS 64
 
@@ -14,6 +43,8 @@ DIR *directory ;
 struct dirent *directory_struct ;
 
 FILE *file ;
+
+FILE *dev_null ;
 
 char nameBuffer[4096] ;
 char *position ;
@@ -46,6 +77,11 @@ int failure = 0;
 
 int main(void)
 {
+    if((dev_null = fopen("/dev/null", "r+")) == NULL) {
+        perror("Unable to open /dev/null. Exiting... ") ;
+        exit(1) ;
+    }
+
     position = stpcpy(nameBuffer, "./formatted_instances/") ;
     if((directory = opendir("./formatted_instances")) == NULL)
     {
@@ -110,7 +146,7 @@ int main(void)
             {
                 strcpy(arranged_name, directory_struct->d_name) ;
                 arranged_name[strlen(directory_struct->d_name) -4] = '\0' ;
-                sprintf(lineBuffer, "./results/%s_time_%s.txt", arranged_name, names[j][q]) ;                
+                sprintf(lineBuffer, "./results/%s_times_detailed_%s.txt", arranged_name, names[j][q]) ;                
 
                 struct stat buffer ;
                 if(stat(lineBuffer, &buffer) == 0) {
@@ -118,44 +154,28 @@ int main(void)
                     continue ;
                 }
 
-                FILE *temp ;
+                resetState() ;
+                TEMP_FOR(costs) ;
+                TEMP_FOR(adjacencies) ;
+                TEMP_FOR(partitions) ;
+                TEMP_FOR(times) ;
 
-                if((temp = fopen("./results/tmp.txt", "w+")) == NULL) {
-                    perror("Error opening temp file. Exiting...") ;
-                    exit(1) ;
-                }
                 struct TSP_instance *instance = create_instance(instanceSize, costMatrix) ;
+
 
                 for(int k = 0; k < TRIALS; k++) {
 
-                    struct timespec time_start, time_end ;
-                    clock_gettime(CLOCK_BOOTTIME, &time_start) ;
-                    
+                    if(k == 1) REDIRECT_TO_NULL() ;
+                    resetState() ;
                     TSP_heuristic_algorithm(instance, derivation_functions[j][q], reconstruction_functions[j], highs_solver, 2) ;
-
-                    clock_gettime(CLOCK_BOOTTIME, &time_end) ;
-
-                    long long elapsed_time = (time_end.tv_sec - time_start.tv_sec) * 1000000000LL +
-                        time_end.tv_nsec - time_start.tv_nsec ;
-
-                    fprintf(temp, "%lld\n", elapsed_time) ;
+                    printState() ;
                 }
 
-                if(fflush(temp) == EOF) {
-                    perror("Error flushing temp file. Exiting...") ;
-                    exit(1) ;
-                }
+                FLUSH_CLOSE_AND_RENAME(costs) ;
+                FLUSH_CLOSE_AND_RENAME(adjacencies) ;
+                FLUSH_CLOSE_AND_RENAME(partitions) ;
+                FLUSH_CLOSE_AND_RENAME(times) ;
 
-                if(fclose(temp) == EOF) {
-                    perror("Error closing temp file. Exiting...") ;
-                    exit(1) ;
-                }
-
-
-                if(rename("./results/tmp.txt", lineBuffer) == -1) {
-                    perror("Error renaming file. Please recover manually") ;
-                    exit(1) ;
-                }
                 
                 if(check_instance_is_correct(instance) != 0 || check_instance_connection(instance) != 0)
                 {

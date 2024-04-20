@@ -34,12 +34,21 @@ add_executable(ExecutionTimeScript
                 running_scripts/execution_time_script.c
                 solvers/highsSolver.c)
 
+add_executable(ExecutionDetailedScript
+                running_scripts/execution_detailed_script.c
+                solvers/highsSolver.c)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 find_package(HIGHS REQUIRED)
 
 target_include_directories(ExecutionTimeScript 
                 PRIVATE ${HIGHS_INCLUDE_DIR}
                 PRIVATE ${PROJECT_SOURCE_DIR}/../TSPPartitionHeuristic/src/model)
+
+target_include_directories(ExecutionDetailedScript 
+                PRIVATE ${HIGHS_INCLUDE_DIR}
+                PRIVATE ${PROJECT_SOURCE_DIR}/../TSPPartitionHeuristic/src/model
+                PRIVATE ${PROJECT_SOURCE_DIR}/../TSPPartitionHeuristic/src/sampler)
 
     if(${HIGHS_INCLUDE_DIR} PATH_EQUAL ${HIGHS_SOURCE_DIR}/HiGHS/src)
         find_path(HIGHS_INCLUDE_BUILD HConfig.h
@@ -48,7 +57,15 @@ target_include_directories(ExecutionTimeScript
         )
         target_include_directories(ExecutionTimeScript
                 PRIVATE ${HIGHS_INCLUDE_BUILD})
+        target_include_directories(ExecutionDetailedScript
+                PRIVATE ${HIGHS_INCLUDE_BUILD})
     endif (${HIGHS_INCLUDE_DIR} PATH_EQUAL ${HIGHS_SOURCE_DIR}/HiGHS/src)
    
 target_link_libraries(ExecutionTimeScript TSPPartitionHeuristic ${HIGHS_LIBRARIES} m)
+target_link_libraries(ExecutionDetailedScript TSPPartitionHeuristicSampled ${HIGHS_LIBRARIES} m)
+
+add_custom_command(TARGET ExecutionTimeScript POST_BUILD
+                    COMMAND cp $<TARGET_FILE:ExecutionTimeScript> ../../performance_scripts/ExecutionTimeScript)
                 
+add_custom_command(TARGET ExecutionDetailedScript POST_BUILD
+                    COMMAND cp $<TARGET_FILE:ExecutionDetailedScript> ../../performance_scripts/ExecutionDetailedScript)

@@ -1,1 +1,1 @@
-include ./resources/Makefile ./adapters/Makefile
+include ./resources/Makefile ./adapters/Makefile ./performance_scripts/Makefile
