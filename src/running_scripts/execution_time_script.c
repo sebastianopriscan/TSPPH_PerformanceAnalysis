@@ -44,8 +44,13 @@ char arranged_name[4096] ;
 
 int failure = 0;
 
-int main(void)
+int ALGO_THRESHOLD = 3 ;
+
+int main(int argc, char **argv)
 {
+    if(argc == 2) 
+        ALGO_THRESHOLD = (int) strtol(argv[1], NULL, 10) ;
+
     position = stpcpy(nameBuffer, "./formatted_instances/") ;
     if((directory = opendir("./formatted_instances")) == NULL)
     {

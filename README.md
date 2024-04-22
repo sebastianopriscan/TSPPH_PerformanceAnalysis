@@ -28,13 +28,30 @@ The definitive layout of the repository is yet to be defined, so  for the moment
 
 # Building
 
-For the moment, run
+The build system used by this project is `GNU Make`.
+Here is a list of the targets that can be run
 
-``` bash
-  make convert
-```
+-
+  ``` bash
+    make convert
+  ```
 
-to download the instances and convert them in a format readable from the _TSP Partition Heuristic_ library.
+  to download the instances and convert them in a format readable from the _TSP Partition Heuristic_ library.
+
+-
+  ``` bash
+    make performance_scripts_build
+  ```
+
+  to build the scripts that take the files generated from `make convert` and do performance evaluation on them.
+
+  Note: to use the _HiGHS_ solver one of the following is needed :
+
+  - Defining the environment variable `HIGHS_SOURCE_DIR` to the path in which the checkout command for _HiGHS_ has been run if there is a local build.
+
+  - Defining the environment variable `HIGHS_INSTALL_DIR` to the path in which _HiGHS_ has been installed in case of a custom installation.
+
+  - Install _HiGHS_ in your system (see [here](https://ergo-code.github.io/HiGHS/dev/installation/#Compile-from-source)).
 
 # Credits
 

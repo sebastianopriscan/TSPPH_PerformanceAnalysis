@@ -75,12 +75,17 @@ char arranged_name[4096] ;
 
 int failure = 0;
 
-int main(void)
+int ALGO_THRESHOLD = 2 ;
+
+int main(int argc, char **argv)
 {
     if((dev_null = fopen("/dev/null", "r+")) == NULL) {
         perror("Unable to open /dev/null. Exiting... ") ;
         exit(1) ;
     }
+
+    if(argc == 2) 
+        ALGO_THRESHOLD = (int) strtol(argv[1], NULL, 10) ;
 
     position = stpcpy(nameBuffer, "./formatted_instances/") ;
     if((directory = opendir("./formatted_instances")) == NULL)
@@ -167,7 +172,7 @@ int main(void)
 
                     if(k == 1) REDIRECT_TO_NULL() ;
                     resetState() ;
-                    TSP_heuristic_algorithm(instance, derivation_functions[j][q], reconstruction_functions[j], highs_solver, 2) ;
+                    TSP_heuristic_algorithm(instance, derivation_functions[j][q], reconstruction_functions[j], highs_solver, ALGO_THRESHOLD) ;
                     printState() ;
                 }
 
