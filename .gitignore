@@ -2,3 +2,5 @@ resources/
 formatted_instances/
 build/
 performance_scripts/Execution*
+a.out
+extra/NonRelaxedTimeAnalysis

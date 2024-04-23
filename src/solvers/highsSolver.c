@@ -2,6 +2,7 @@
 #include "interfaces/highs_c_api.h"
 
 #include <math.h>
+#include <float.h>
 
 static inline unsigned char isPowOfTwo(unsigned int i, unsigned long node_number)
 {
@@ -123,7 +124,7 @@ void highs_solver(struct TSP_instance *instance, unsigned char relaxed)
             if(i != j)
             {
                 //Setting up cost values and integralities
-                colLower[cursor] = 0 ;
+                colLower[cursor] = 0.0 ;
                 colUpper[cursor] = 1.0 ;
                 col_cost[cursor] = get_connection_cost(instance, i, j) ;
                 integralities[cursor] = kHighsVarTypeInteger ;
@@ -135,7 +136,7 @@ void highs_solver(struct TSP_instance *instance, unsigned char relaxed)
                     if(relaxed == RELAXED || isPowOfTwo(cursor+1, instance->nodes) || isPowOfTwo(~(cursor+1), instance->nodes))
                         row_upper[cursor] = 1.0 ;
                     else
-                        row_upper[cursor] = 1.0e30 ;
+                        row_upper[cursor] = DBL_MAX ;
                 }
 
                 //'A' matrix compilation column wise : for every column we scan all partitions represented as a bitmask q, then we seek
@@ -165,7 +166,7 @@ void highs_solver(struct TSP_instance *instance, unsigned char relaxed)
                 //All the non-zeros in 'A' have value 1, still piggybacking on the main loop
                 if(cursor < (unsigned int) numNz)
                 {
-                    a_value[cursor] = 1 ;
+                    a_value[cursor] = 1.0 ;
                 }
 
                 cursor ++ ;
@@ -180,18 +181,18 @@ void highs_solver(struct TSP_instance *instance, unsigned char relaxed)
         if(relaxed == RELAXED || isPowOfTwo(cursor+1, instance->nodes) || isPowOfTwo(~(cursor+1), instance->nodes))
             row_upper[i] = 1.0 ;
         else
-            row_upper[i] = 1.0e30 ;
+            row_upper[i] = DBL_MAX ;
 
         if(i < (unsigned int)numNz)
         {
-            a_value[i] = 1 ;
+            a_value[i] = 1.0 ;
         }
     }
 
     //Exhausting the remaining non-zeroes to set
     for (unsigned int i = cursor ; i < (unsigned int) numNz ; i++)
     {
-        a_value[i] = 1 ;
+        a_value[i] = 1.0 ;
     }
 
     double* col_value ;
@@ -232,7 +233,18 @@ void highs_solver(struct TSP_instance *instance, unsigned char relaxed)
         {
             if (i != j)
             {
-                instance->adjacencies[instance->nodes * i + j] = (unsigned char) col_value[cursor] ;
+                double guess_1 = (1.0 - col_value[cursor]) >= 0 ? 1.0 - col_value[cursor] : col_value[cursor] - 1.0 ;
+                double guess_0 = col_value[cursor] >= 0 ? col_value[cursor] : -col_value[cursor] ;
+                double threshold = 1.0e-5 ;
+                if(guess_0 < threshold)
+                    instance->adjacencies[instance->nodes * i + j] = 0 ;
+                else if(guess_1 < threshold)
+                    instance->adjacencies[instance->nodes * i + j] = 1 ;
+                else {
+                    perror("Unable to decide if value is zero or 1. Exiting...: ") ;
+                    exit(1) ;
+                }
+
                 cursor++ ;
             }
         }

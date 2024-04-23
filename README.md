@@ -53,6 +53,14 @@ Here is a list of the targets that can be run
 
   - Install _HiGHS_ in your system (see [here](https://ergo-code.github.io/HiGHS/dev/installation/#Compile-from-source)).
 
+- 
+  ``` bash
+    make non_relaxed_time_analysis_build
+  ```
+
+  to build the scripts that test your PC's ability to solve instances of a certain dimension, useful for configuring the algorithm threshold. Like above, _HiGHS_ or other solvers are needed.
+
+
 # Credits
 
 The evaluated instances are taken from the following source(s) :

@@ -69,3 +69,27 @@ add_custom_command(TARGET ExecutionTimeScript POST_BUILD
                 
 add_custom_command(TARGET ExecutionDetailedScript POST_BUILD
                     COMMAND cp $<TARGET_FILE:ExecutionDetailedScript> ../../performance_scripts/ExecutionDetailedScript)
+
+
+add_executable(NonRelaxedTimeAnalysis
+                non_relaxed_instance_time_measurer/non_relaxed_time_measurer.c
+                solvers/highsSolver.c)
+
+target_include_directories(NonRelaxedTimeAnalysis 
+                PRIVATE ${HIGHS_INCLUDE_DIR}
+                PRIVATE ${PROJECT_SOURCE_DIR}/../TSPPartitionHeuristic/src/model
+                PRIVATE ${PROJECT_SOURCE_DIR}/../TSPPartitionHeuristic/src/sampler)
+
+    if(${HIGHS_INCLUDE_DIR} PATH_EQUAL ${HIGHS_SOURCE_DIR}/HiGHS/src)
+        find_path(HIGHS_INCLUDE_BUILD HConfig.h
+        PATHS
+        ${HIGHS_SOURCE_DIR}/HiGHS/build
+        )
+        target_include_directories(NonRelaxedTimeAnalysis
+                PRIVATE ${HIGHS_INCLUDE_BUILD})
+    endif (${HIGHS_INCLUDE_DIR} PATH_EQUAL ${HIGHS_SOURCE_DIR}/HiGHS/src)
+   
+target_link_libraries(NonRelaxedTimeAnalysis TSPPartitionHeuristic ${HIGHS_LIBRARIES} m)
+
+add_custom_command(TARGET NonRelaxedTimeAnalysis POST_BUILD
+                    COMMAND cp $<TARGET_FILE:NonRelaxedTimeAnalysis> ../../extra/NonRelaxedTimeAnalysis)
