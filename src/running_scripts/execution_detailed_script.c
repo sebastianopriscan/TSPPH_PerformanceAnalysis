@@ -26,7 +26,7 @@
         perror("Error closing temp file. Exiting...") ;\
         exit(1) ;\
     }\
-    sprintf(lineBuffer, "./results/%s_"#ATTR"_detailed_%s.txt", arranged_name, names[j][q]) ;\ 
+    sprintf(lineBuffer, "./results/%s_"#ATTR"_detailed_%s_thr_%d.txt", arranged_name, names[j][q], ALGO_THRESHOLD) ;\ 
     if(rename("./results/tmp_"#ATTR".txt", lineBuffer) == -1) {\
         perror("Error renaming file. Please recover manually") ;\
         exit(1) ;\
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
             {
                 strcpy(arranged_name, directory_struct->d_name) ;
                 arranged_name[strlen(directory_struct->d_name) -4] = '\0' ;
-                sprintf(lineBuffer, "./results/%s_times_detailed_%s.txt", arranged_name, names[j][q]) ;                
+                sprintf(lineBuffer, "./results/%s_times_detailed_%s_thr_%d.txt", arranged_name, names[j][q], ALGO_THRESHOLD) ;                
 
                 struct stat buffer ;
                 if(stat(lineBuffer, &buffer) == 0) {

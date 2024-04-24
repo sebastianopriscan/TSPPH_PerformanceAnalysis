@@ -115,7 +115,7 @@ int main(int argc, char **argv)
             {
                 strcpy(arranged_name, directory_struct->d_name) ;
                 arranged_name[strlen(directory_struct->d_name) -4] = '\0' ;
-                sprintf(lineBuffer, "./results/%s_time_%s.txt", arranged_name, names[j][q]) ;                
+                sprintf(lineBuffer, "./results/%s_time_%s_thr_%d.txt", arranged_name, names[j][q], ALGO_THRESHOLD) ;                
 
                 struct stat buffer ;
                 if(stat(lineBuffer, &buffer) == 0) {
