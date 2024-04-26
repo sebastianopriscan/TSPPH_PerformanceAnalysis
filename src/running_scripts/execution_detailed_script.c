@@ -37,7 +37,7 @@
     changeOutputOf(adjacencies, dev_null) ; \
     changeOutputOf(partitions, dev_null) ;} \
 
-#define TRIALS 64
+int TRIALS = 64 ;
 
 DIR *directory ;
 struct dirent *directory_struct ;
@@ -165,29 +165,44 @@ int main(int argc, char **argv)
                 TEMP_FOR(partitions) ;
                 TEMP_FOR(times) ;
 
-                struct TSP_instance *instance = create_instance(instanceSize, costMatrix) ;
-
+                if(instanceSize < 500) {
+                    TRIALS = 64 ;
+                }else if(500 <= instanceSize && instanceSize < 1000) {
+                    TRIALS = 32 ;
+                } else
+                    TRIALS = 5 ;
 
                 for(int k = 0; k < TRIALS; k++) {
 
                     if(k == 1) REDIRECT_TO_NULL() ;
                     resetState() ;
+                    struct TSP_instance *instance = create_instance(instanceSize, costMatrix) ;
+
                     TSP_heuristic_algorithm(instance, derivation_functions[j][q], reconstruction_functions[j], highs_solver, ALGO_THRESHOLD) ;
                     printState() ;
+
+                    if(check_instance_is_correct(instance) != 0 || check_instance_connection(instance) != 0)
+                    {
+                        fprintf(stderr, "Instance of file %s is not correct with policy combo %d,%d\n", nameBuffer, j, q) ;
+                        failure = 1 ;
+
+                        if(k == 0) {
+                            fprintf(temp_adjacencies, "Cost : %e\n", 0.0) ;
+                        }
+                    }
+                    else {
+                        if(k == 0) {
+                            fprintf(temp_adjacencies, "Cost : %e\n", get_solution_cost(instance)) ;
+                        }
+                    }
+
+                    destroy_instance(instance) ;
                 }
 
                 FLUSH_CLOSE_AND_RENAME(costs) ;
                 FLUSH_CLOSE_AND_RENAME(adjacencies) ;
                 FLUSH_CLOSE_AND_RENAME(partitions) ;
                 FLUSH_CLOSE_AND_RENAME(times) ;
-
-                
-                if(check_instance_is_correct(instance) != 0 || check_instance_connection(instance) != 0)
-                {
-                    fprintf(stderr, "Instance of file %s is not correct with policy combo %d,%d\n", nameBuffer, j, q) ;
-                    failure = 1 ;
-                }
-                destroy_instance(instance) ;
             }
 
         free(costMatrix) ;
