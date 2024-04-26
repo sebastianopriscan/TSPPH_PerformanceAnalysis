@@ -8,7 +8,7 @@
 #include "model.h"
 #include "../solvers/highsSolver.h"
 
-#define TRIALS 64
+int TRIALS = 64 ;
 
 DIR *directory ;
 struct dirent *directory_struct ;
@@ -129,9 +129,17 @@ int main(int argc, char **argv)
                     perror("Error opening temp file. Exiting...") ;
                     exit(1) ;
                 }
-                struct TSP_instance *instance = create_instance(instanceSize, costMatrix) ;
+
+                if(instanceSize < 500) {
+                    TRIALS = 64 ;
+                }else if(500 <= instanceSize && instanceSize < 1000) {
+                    TRIALS = 32 ;
+                } else
+                    TRIALS = 5 ;
 
                 for(int k = 0; k < TRIALS; k++) {
+
+                    struct TSP_instance *instance = create_instance(instanceSize, costMatrix) ;
 
                     struct timespec time_start, time_end ;
                     clock_gettime(CLOCK_BOOTTIME, &time_start) ;
@@ -144,6 +152,13 @@ int main(int argc, char **argv)
                         time_end.tv_nsec - time_start.tv_nsec ;
 
                     fprintf(temp, "%lld\n", elapsed_time) ;
+
+                    if(check_instance_is_correct(instance) != 0 || check_instance_connection(instance) != 0)
+                    {
+                        fprintf(stderr, "Instance of file %s is not correct with policy combo %d,%d\n", nameBuffer, j, q) ;
+                        failure = 1 ;
+                    }
+                    destroy_instance(instance) ;
                 }
 
                 if(fflush(temp) == EOF) {
@@ -162,12 +177,6 @@ int main(int argc, char **argv)
                     exit(1) ;
                 }
                 
-                if(check_instance_is_correct(instance) != 0 || check_instance_connection(instance) != 0)
-                {
-                    fprintf(stderr, "Instance of file %s is not correct with policy combo %d,%d\n", nameBuffer, j, q) ;
-                    failure = 1 ;
-                }
-                destroy_instance(instance) ;
             }
 
         free(costMatrix) ;
