@@ -185,7 +185,17 @@ int main(int argc, char **argv)
                     {
                         fprintf(stderr, "Instance of file %s is not correct with policy combo %d,%d\n", nameBuffer, j, q) ;
                         failure = 1 ;
+
+                        if(k == 0) {
+                            fprintf(temp_adjacencies, "Cost : %e\n", 0.0) ;
+                        }
                     }
+                    else {
+                        if(k == 0) {
+                            fprintf(temp_adjacencies, "Cost : %e\n", get_solution_cost(instance)) ;
+                        }
+                    }
+
                     destroy_instance(instance) ;
                 }
 
