@@ -1,0 +1,21 @@
+Recursion step 0:
+Partitions:
+0; 1; 
+2; 3; 
+4; 5; 
+6; 7; 8; 
+9; 10; 
+11; 12; 
+13; 14; 
+15; 16; 
+Recursion step 1:
+Partitions:
+0; 1; 
+2; 3; 
+4; 5; 
+6; 7; 
+Recursion step 2:
+Partitions:
+0; 1; 
+2; 3; 
+Recursion step 3:

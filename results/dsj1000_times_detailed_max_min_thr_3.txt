@@ -1,0 +1,27 @@
+Recursion step 0:
+Time_solving ; Time_derivating ; Time_reconstructing
+670531665323 ; 22331469 ; 549991
+Recursion step 1:
+Time_solving ; Time_derivating ; Time_reconstructing
+117594292690 ; 4499230 ; 141107
+Recursion step 2:
+Time_solving ; Time_derivating ; Time_reconstructing
+5300936653 ; 861960 ; 43652
+Recursion step 3:
+Time_solving ; Time_derivating ; Time_reconstructing
+925938822 ; 177088 ; 14549
+Recursion step 4:
+Time_solving ; Time_derivating ; Time_reconstructing
+143731779 ; 48168 ; 3285
+Recursion step 5:
+Time_solving ; Time_derivating ; Time_reconstructing
+41569074 ; 11850 ; 1025
+Recursion step 6:
+Time_solving ; Time_derivating ; Time_reconstructing
+27890249 ; 3346 ; 820
+Recursion step 7:
+Time_solving ; Time_derivating ; Time_reconstructing
+15981861 ; 1139 ; 737
+Recursion step 8:
+Time_solving ; Time_derivating ; Time_reconstructing
+63 ; 0 ; 0

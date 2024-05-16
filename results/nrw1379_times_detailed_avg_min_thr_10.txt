@@ -1,0 +1,24 @@
+Recursion step 0:
+Time_solving ; Time_derivating ; Time_reconstructing
+1571981949797 ; 47368386 ; 995301
+Recursion step 1:
+Time_solving ; Time_derivating ; Time_reconstructing
+227985029230 ; 8049569 ; 255359
+Recursion step 2:
+Time_solving ; Time_derivating ; Time_reconstructing
+56215613309 ; 1685299 ; 76348
+Recursion step 3:
+Time_solving ; Time_derivating ; Time_reconstructing
+2123646517 ; 355240 ; 22257
+Recursion step 4:
+Time_solving ; Time_derivating ; Time_reconstructing
+363892882 ; 81184 ; 6545
+Recursion step 5:
+Time_solving ; Time_derivating ; Time_reconstructing
+66744374 ; 18372 ; 1787
+Recursion step 6:
+Time_solving ; Time_derivating ; Time_reconstructing
+31827503 ; 4838 ; 902
+Recursion step 7:
+Time_solving ; Time_derivating ; Time_reconstructing
+39988848 ; 0 ; 0
