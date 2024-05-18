@@ -1,0 +1,6 @@
+Recursion step 0:
+Time_solving ; Time_derivating ; Time_reconstructing
+426625531 ; 35933 ; 6620
+Recursion step 1:
+Time_solving ; Time_derivating ; Time_reconstructing
+199778837246 ; 0 ; 0
