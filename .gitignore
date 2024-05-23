@@ -4,3 +4,4 @@ build/
 performance_scripts/Execution*
 a.out
 extra/NonRelaxedTimeAnalysis
+virt_env
