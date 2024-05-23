@@ -4,6 +4,8 @@ This repository, like its submodule *TSPPartitionHeuristic*, is part of the "*Al
 
 Its focus is to test the performance of the *TSP Partition Heuristic* algorithm on various instances taken from TSP libraries found online, in order to check whether the heuristic can give useful solutions or not
 
+# NOTE: RESULTS ARE ON THE `first_running_samples` BRANCH!
+
 # Layout of the repository
 
   - TSPPartitionHeuristic : git submodule containing the heuristic's description and implementation
