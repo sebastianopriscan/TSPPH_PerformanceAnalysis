@@ -6,8 +6,6 @@ Its focus is to test the performance of the *TSP Partition Heuristic* algorithm 
 
 # Layout of the repository
 
-The definitive layout of the repository is yet to be defined, so  for the moment only an initial draft will be given:
-
   - TSPPartitionHeuristic : git submodule containing the heuristic's description and implementation
 
   - formatted\_instances : directory containing the library-compatible instances eventually converted from the online sources
@@ -60,6 +58,14 @@ Here is a list of the targets that can be run
 
   to build the scripts that test your PC's ability to solve instances of a certain dimension, useful for configuring the algorithm threshold. Like above, _HiGHS_ or other solvers are needed.
 
+- 
+  ``` bash
+    make venv
+    source ./analyzers/virt_env/bin/activate
+    make install-deps
+  ```
+
+  to build and activate the environment needed to run the analyzer scripts. All scripts should be called from the root directory
 
 # Credits
 
